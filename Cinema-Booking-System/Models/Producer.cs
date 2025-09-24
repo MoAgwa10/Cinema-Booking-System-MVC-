@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-public class Producer
+public class Producer:IEntityBase
 {
     [Key]
     public int id {get;set;}    
@@ -8,4 +8,8 @@ public class Producer
     public string ProfilePicUrl {get;set;}
 
     public string Bio {get;set;}
+
+
+
+    public List<Movie> Movies {get;set;}
 }

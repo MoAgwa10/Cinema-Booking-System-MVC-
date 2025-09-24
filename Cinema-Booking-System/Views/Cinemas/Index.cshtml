@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Cinema>
+
+@{
+    ViewData["Title"] = "List Of Cinemas";
+}
+
+<style>
+    body {
+        background-color: #f0f8ff; /* لون خلفية الصفحة */
+    }
+
+    .table-container {
+        background-color: #ffffff; /* لون خلفية الجدول */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .table th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .table td, .table th {
+        vertical-align: middle !important;
+        text-align: center;
+    }
+
+    img.cinema-logo {
+        max-width: 150px;
+        border-radius: 10px;
+    }
+</style>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-10 table-container">
+        <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.First().LogoUrl)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().FullName)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().Description)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cinema in Model)
+                {
+                    <tr>
+                        <td>
+                            <img class="cinema-logo" src="@cinema.LogoUrl" alt="@cinema.FullName" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => cinema.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => cinema.Description)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

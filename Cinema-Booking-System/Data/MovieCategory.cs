@@ -1,6 +1,13 @@
 ﻿namespace Cinema_Booking_System.Data
 {
-    public class MovieCategory
+    public enum MovieCategory
     {
+        Action,
+        Comedy,
+        Drama,
+        Horror,
+        Cartoon,
+        Documentary
+
     }
 }
