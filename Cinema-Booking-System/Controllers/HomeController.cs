@@ -1,21 +1,26 @@
 using System.Diagnostics;
 using Cinema_Booking_System.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema_Booking_System.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, AppDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+     
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var movies = await _context.Movies.ToListAsync();
+            return View(movies);
         }
 
         public IActionResult Privacy()

@@ -1,8 +1,29 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<Cinema_Booking_System.Models.Movie>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="row">
+        @foreach (var movie in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-lg h-100">
+                    <img src="@movie.ImageUrl" class="card-img-top" alt="@movie.Name" style="height:300px; object-fit:cover;" />
+                    <div class="card-body">
+                        <h5 class="card-title">@movie.Name</h5>
+                        <p class="card-text">@movie.Description</p>
+                        <p><strong>Price:</strong> $@movie.Price</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.id" class="btn btn-primary">View Details</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary" disabled>Login to View</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

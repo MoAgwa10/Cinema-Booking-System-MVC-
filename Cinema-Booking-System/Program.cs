@@ -1,10 +1,10 @@
 using Cinema_Booking_System.Data;
+using Cinema_Booking_System.Data.Base;
 using Cinema_Booking_System.Data.Repo;
 using Cinema_Booking_System.Data.Service;
-using FluentAssertions.Common;
+using Cinema_Booking_System.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Cinema_Booking_System
 {
@@ -14,33 +14,53 @@ namespace Cinema_Booking_System
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("mycon"));
             });
 
+            
             builder.Services.AddControllersWithViews();
 
+            // Services
             builder.Services.AddScoped<IActorsService, ActorsService>();
             builder.Services.AddScoped<IProducersService, ProducersService>();
             builder.Services.AddScoped<ICinemasService, CinemasService>();
             builder.Services.AddScoped<IMoviesService, MoviesService>();
             builder.Services.AddScoped<IOrdersService, OrdersService>();
+            builder.Services.AddScoped(typeof(IEntityBaseRepository<>), typeof(EntityBaseRepository<>));
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
 
+            // Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>()  
+                .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+           
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                
+                options.Password.RequiredLength = 8;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+
+                
+                options.User.RequireUniqueEmail = true;
+            });
 
             var app = builder.Build();
 
+           
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 AppDbInitializer.Seed(services);
             }
 
-            // Configure the HTTP request pipeline
+            // Middleware
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -49,7 +69,10 @@ namespace Cinema_Booking_System
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseRouting();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

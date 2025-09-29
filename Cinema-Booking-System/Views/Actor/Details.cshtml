@@ -1,0 +1,17 @@
+﻿@model Cinema_Booking_System.Models.Actor
+
+@{
+    ViewData["Title"] = "Actor Details";
+}
+
+<h2>Actor Details</h2>
+
+<div>
+    <img src="@Model.ProfilePicUrl" alt="@Model.FullName" style="width:150px;height:180px;" />
+    <h3>@Model.FullName</h3>
+    <p><strong>Biography:</strong> @Model.Bio</p>
+</div>
+
+<p>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</p>

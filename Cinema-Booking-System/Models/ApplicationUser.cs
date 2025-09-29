@@ -4,5 +4,7 @@ using Microsoft.AspNetCore.Identity;
 public class ApplicationUser : IdentityUser
 {
     [Display(Name = "Full name")]
-    public string FullName { get; set; }
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
 }

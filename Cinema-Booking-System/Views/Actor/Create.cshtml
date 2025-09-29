@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Create Actor (Raw)";
+}
+
+<h2>Create Actor (Raw Test)</h2>
+
+<form action="/Actor/Create" method="post">
+    <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="FullName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Profile Picture URL</label>
+        <input type="text" name="ProfilePicUrl" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Biography</label>
+        <input type="text" name="Bio" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

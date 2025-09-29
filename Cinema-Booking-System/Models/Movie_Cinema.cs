@@ -1,4 +1,6 @@
-﻿public class Movie_Cinema
+﻿using Cinema_Booking_System.Models;
+
+public class Movie_Cinema
 {
     public int MovieId { get; set; }
     public Movie Movie { get; set; }

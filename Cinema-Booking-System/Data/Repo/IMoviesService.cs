@@ -1,4 +1,5 @@
-﻿using Cinema_Booking_System.ViewModel;
+﻿using Cinema_Booking_System.Models;
+using Cinema_Booking_System.ViewModel;
 
 public interface IMoviesService : IEntityBaseRepository<Movie>
 {

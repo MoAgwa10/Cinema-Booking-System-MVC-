@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Cinema_Booking_System.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema_Booking_System.Controllers
@@ -6,17 +7,37 @@ namespace Cinema_Booking_System.Controllers
     public class CinemasController : Controller
     {
 
-        private readonly AppDbContext _context;
-        public CinemasController(AppDbContext context)
+        private readonly ICinemasService _service;
+
+        public CinemasController(ICinemasService service)
         {
-            _context = context;
+            _service = service;
         }
 
-
-        public async Task<ActionResult> Index()
+        // GET: Cinemas
+        public async Task<IActionResult> Index()
         {
-            var Cinema =await _context.Cinemas.ToListAsync();
-            return View(Cinema);
+            var allCinemas = await _service.GetAllAsync();
+            return View(allCinemas);
+        }
+
+        // GET: Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("FullName,LogoUrl,Description")] Cinema cinema)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(cinema);
+            }
+            await _service.AddAsync(cinema);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

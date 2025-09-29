@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Cinema_Booking_System.Models;
 
 public class Producer:IEntityBase
 {

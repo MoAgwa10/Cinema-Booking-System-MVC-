@@ -54,7 +54,11 @@ namespace Cinema_Booking_System.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -143,7 +147,7 @@ namespace Cinema_Booking_System.Migrations
                     b.ToTable("Actors");
                 });
 
-            modelBuilder.Entity("Movie", b =>
+            modelBuilder.Entity("Cinema_Booking_System.Models.Movie", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -310,7 +314,7 @@ namespace Cinema_Booking_System.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Movie", "Movie")
+                    b.HasOne("Cinema_Booking_System.Models.Movie", "Movie")
                         .WithMany("Actor_Movies")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -321,7 +325,7 @@ namespace Cinema_Booking_System.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("Movie", b =>
+            modelBuilder.Entity("Cinema_Booking_System.Models.Movie", b =>
                 {
                     b.HasOne("Producer", "Producer")
                         .WithMany("Movies")
@@ -340,7 +344,7 @@ namespace Cinema_Booking_System.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Movie", "Movie")
+                    b.HasOne("Cinema_Booking_System.Models.Movie", "Movie")
                         .WithMany("Movies_Cinemas")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -364,7 +368,7 @@ namespace Cinema_Booking_System.Migrations
 
             modelBuilder.Entity("OrderItem", b =>
                 {
-                    b.HasOne("Movie", "Movie")
+                    b.HasOne("Cinema_Booking_System.Models.Movie", "Movie")
                         .WithMany("orderItems")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,7 +387,7 @@ namespace Cinema_Booking_System.Migrations
 
             modelBuilder.Entity("ShoppingCartItem", b =>
                 {
-                    b.HasOne("Movie", "Movie")
+                    b.HasOne("Cinema_Booking_System.Models.Movie", "Movie")
                         .WithMany()
                         .HasForeignKey("Movieid")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -402,7 +406,7 @@ namespace Cinema_Booking_System.Migrations
                     b.Navigation("Actor_Movies");
                 });
 
-            modelBuilder.Entity("Movie", b =>
+            modelBuilder.Entity("Cinema_Booking_System.Models.Movie", b =>
                 {
                     b.Navigation("Actor_Movies");
 

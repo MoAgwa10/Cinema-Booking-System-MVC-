@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Cinema_Booking_System.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema_Booking_System.Cart
 {

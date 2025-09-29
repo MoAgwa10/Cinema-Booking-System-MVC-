@@ -1,5 +1,6 @@
 ﻿using Cinema_Booking_System;
 using Cinema_Booking_System.Data.Base;
+using Cinema_Booking_System.Models;
 using Cinema_Booking_System.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
