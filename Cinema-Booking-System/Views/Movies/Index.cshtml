@@ -1,8 +1,21 @@
-﻿@using Cinema_Booking_System.Models
+@using Cinema_Booking_System.Models
 @model IEnumerable<Movie>
 
 @{
     ViewData["Title"] = "List of Movies";
+}
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Add New Movie
+                </a>
+            </p>
+        </div>
+    </div>
 }
 
 <div class="row">
@@ -34,8 +47,8 @@
                             <p class="card-text"><b>Start Date: </b>@item.Startdate.ToString("dd MMM yy")</p>
                             <p class="card-text"><b>End Date: </b>@item.Enddate.ToString("dd MMM yy")</p>
 
-                            <!-- عرض أسماء السينمات -->
-                            <p class="card-text">
+                            <!-- عرض السينمات -->
+                            <p class="card-text mb-1">
                                 <b>Cinema(s): </b>
                                 @if (item.Movies_Cinemas != null && item.Movies_Cinemas.Any())
                                 {
@@ -47,7 +60,33 @@
                                 }
                             </p>
 
-                            <p class="card-text ">
+                            <!-- عرض الممثلين -->
+                            <p class="card-text mb-1">
+                                <b>Actors:</b>
+                                @if (item.Actor_Movies != null && item.Actor_Movies.Any())
+                                {
+                                    foreach (var actorLink in item.Actor_Movies)
+                                    {
+                                        <a asp-controller="Actor"
+                                           asp-action="Details"
+                                           asp-route-id="@actorLink.Actor.id"
+                                           class="text-decoration-none text-primary">
+                                            @actorLink.Actor.FullName
+                                        </a>
+
+                                        @if (actorLink != item.Actor_Movies.Last())
+                                        {
+                                            <span>, </span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No actors assigned</span>
+                                }
+                            </p>
+
+                            <p class="card-text">
                                 <b>Status: </b>
                                 @if (DateTime.Now >= item.Startdate && DateTime.Now <= item.Enddate)
                                 {
@@ -71,12 +110,33 @@
                                 <a class="btn btn-outline-primary float-right" asp-action="Details" asp-route-id="@item.id">
                                     <i class="bi bi-eye-fill"></i> Show Details
                                 </a>
-                                <a class="btn btn-success text-white @((DateTime.Now > item.Enddate) ? "disabled" : "")"
-                                   asp-controller="Orders"
-                                   asp-action="AddItemToShoppingCart"
-                                   asp-route-id="@item.id">
-                                    <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c"))
-                                </a>
+
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                {
+                                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@item.id">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                }
+
+                                @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin") && DateTime.Now <= item.Enddate)
+                                {
+                                    <a class="btn btn-success text-white"
+                                       asp-controller="Orders"
+                                       asp-action="AddItemToShoppingCart"
+                                       asp-route-id="@item.id">
+                                        <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c"))
+                                    </a>
+                                }
+                                else if (User.IsInRole("Admin"))
+                                {
+                                    <span class="text-muted">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Admin users cannot purchase tickets
+                                    </span>
+                                }
                             </p>
                         </div>
                     </div>

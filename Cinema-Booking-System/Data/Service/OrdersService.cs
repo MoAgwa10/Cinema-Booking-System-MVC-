@@ -1,4 +1,5 @@
-﻿using Cinema_Booking_System;
+using Cinema_Booking_System;
+using Cinema_Booking_System.Models;
 using Microsoft.EntityFrameworkCore;
 
 public class OrdersService : IOrdersService
@@ -37,11 +38,25 @@ public class OrdersService : IOrdersService
             {
                 Amount = item.Amount,
                 MovieId = item.Movie.id,
-                OrderId = order.Id,
+                OrderId = order.id,
                 Price = item.Movie.Price
             };
             await _context.OrderItems.AddAsync(orderItem);
         }
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Order?> GetLatestOrderByUserIdAsync(string userId)
+    {
+        return await _context.Orders
+            .Where(o => o.UserId == userId)
+            .OrderByDescending(o => o.OrderDate)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task UpdateOrderAsync(Order order)
+    {
+        _context.Orders.Update(order);
         await _context.SaveChangesAsync();
     }
 }

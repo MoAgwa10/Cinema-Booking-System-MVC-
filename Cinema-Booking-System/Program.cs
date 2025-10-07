@@ -1,8 +1,11 @@
+using Cinema_Booking_System;
 using Cinema_Booking_System.Data;
 using Cinema_Booking_System.Data.Base;
 using Cinema_Booking_System.Data.Repo;
 using Cinema_Booking_System.Data.Service;
 using Cinema_Booking_System.Email;
+using Cinema_Booking_System.Models;
+using Cinema_Booking_System.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +26,11 @@ namespace Cinema_Booking_System
             
             builder.Services.AddControllersWithViews();
 
+            // Session configuration for shopping cart
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession();
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             // Services
             builder.Services.AddScoped<IActorsService, ActorsService>();
             builder.Services.AddScoped<IProducersService, ProducersService>();
@@ -31,6 +39,8 @@ namespace Cinema_Booking_System
             builder.Services.AddScoped<IOrdersService, OrdersService>();
             builder.Services.AddScoped(typeof(IEntityBaseRepository<>), typeof(EntityBaseRepository<>));
             builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IPaymentService, MockPaymentService>();
+            builder.Services.AddScoped<IImageService, ImageService>();
 
             // Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -57,7 +67,7 @@ namespace Cinema_Booking_System
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                AppDbInitializer.Seed(services);
+                await AppDbInitializer.SeedAsync(services);
             }
 
             // Middleware
@@ -71,6 +81,7 @@ namespace Cinema_Booking_System
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();

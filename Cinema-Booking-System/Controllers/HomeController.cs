@@ -16,11 +16,18 @@ namespace Cinema_Booking_System.Controllers
             _context = context;
         }
 
-     
         public async Task<IActionResult> Index()
         {
-            var movies = await _context.Movies.ToListAsync();
-            return View(movies);
+            // Get featured movies (current and upcoming movies)
+            var featuredMovies = await _context.Movies
+                .Include(m => m.Movies_Cinemas)
+                    .ThenInclude(mc => mc.Cinema)
+                .Where(m => m.Enddate >= DateTime.Now) // Only show current and future movies
+                .OrderBy(m => m.Startdate)
+                .Take(6) // Limit to 6 movies for the home page
+                .ToListAsync();
+
+            return View(featuredMovies);
         }
 
         public IActionResult Privacy()

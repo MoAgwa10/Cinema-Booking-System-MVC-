@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cinema_Booking_System.Models
 {
@@ -6,15 +6,14 @@ namespace Cinema_Booking_System.Models
     {
         [Key]
         public int id { get; set; }
+        
         [Display(Name = "Cinema Name")]
         [Required(ErrorMessage = "Cinema name is required")]
         public string FullName { get; set; }
 
-
         [Display(Name = "Cinema Logo")]
-        [Required(ErrorMessage = "Cinema logo is required")]
-        public string LogoUrl { get; set; }
-
+        // [Required] // Temporarily commented out for testing
+        public string? LogoUrl { get; set; }
 
         [Display(Name = "Description")]
         [Required(ErrorMessage = "Description is required")]

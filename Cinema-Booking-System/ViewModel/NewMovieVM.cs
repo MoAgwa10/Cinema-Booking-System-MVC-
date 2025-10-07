@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Cinema_Booking_System.Data;
 
 namespace Cinema_Booking_System.ViewModel
@@ -6,7 +6,7 @@ namespace Cinema_Booking_System.ViewModel
 
     public class NewMovieVM
     {
-        public int Id { get; set; }
+        public int id { get; set; }
 
         [Display(Name = "Movie name")]
         [Required(ErrorMessage = "Name is required")]

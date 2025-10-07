@@ -1,60 +1,72 @@
-﻿@model IEnumerable<Cinema>
+@model IEnumerable<Cinema>
 
 @{
-    ViewData["Title"] = "List Of Cinemas";
+    ViewData["Title"] = "Cinemas";
 }
 
-<style>
-    body {
-        background-color: #f0f8ff; /* لون خلفية الصفحة */
-    }
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>@ViewData["Title"]</h2>
+        
+        @* Debug Info *@
+        @if (TempData["Debug"] != null)
+        {
+            <div class="alert alert-info">
+                <strong>Debug Info:</strong> @TempData["Debug"]
+            </div>
+        }
+        
+        @if (TempData["UploadResult"] != null)
+        {
+            <div class="alert alert-warning">
+                <strong>Upload Result:</strong> @TempData["UploadResult"]
+            </div>
+        }
 
-    .table-container {
-        background-color: #ffffff; /* لون خلفية الجدول */
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
+        <p>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Add New Cinema
+                </a>
+            }
+        </p>
 
-    .table th {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .table td, .table th {
-        vertical-align: middle !important;
-        text-align: center;
-    }
-
-    img.cinema-logo {
-        max-width: 150px;
-        border-radius: 10px;
-    }
-</style>
-
-<div class="row justify-content-center mt-4">
-    <div class="col-md-10 table-container">
-        <h2 class="text-center mb-4">@ViewData["Title"]</h2>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-striped">
             <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.First().LogoUrl)</th>
-                    <th>@Html.DisplayNameFor(model => model.First().FullName)</th>
-                    <th>@Html.DisplayNameFor(model => model.First().Description)</th>
+                <tr class="text-center">
+                    <th>Logo</th>
+                    <th>Cinema Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var cinema in Model)
                 {
                     <tr>
-                        <td>
-                            <img class="cinema-logo" src="@cinema.LogoUrl" alt="@cinema.FullName" />
+                        <td class="align-middle text-center">
+                            <img class="rounded" src="@cinema.LogoUrl" alt="@cinema.FullName" style="max-width: 150px" />
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => cinema.FullName)
+                        <td class="align-middle">
+                            <label class="control-label">@cinema.FullName</label>
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => cinema.Description)
+                        <td class="align-middle">
+                            <label class="control-label">@cinema.Description</label>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@cinema.id">
+                                <i class="bi bi-eye"></i> Details
+                            </a>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <a class="btn btn-outline-success text-success" asp-action="Edit" asp-route-id="@cinema.id">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a class="btn btn-danger text-white" asp-action="Delete" asp-route-id="@cinema.id">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                            }
                         </td>
                     </tr>
                 }
