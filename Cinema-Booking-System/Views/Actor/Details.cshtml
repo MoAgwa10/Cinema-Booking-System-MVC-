@@ -1,0 +1,57 @@
+@model Cinema_Booking_System.Models.Actor
+
+@{
+    ViewData["Title"] = "Actor Details";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="card mb-3">
+            <div class="card-header text-white bg-info">
+                <h5 class="card-title">
+                    Actor Details
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <a class="text-white float-right" asp-action="Edit" asp-route-id="@Model.id">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                    }
+                </h5>
+            </div>
+
+            <div class="row g-0">
+                <div class="col-md-4 text-center">
+                    <img src="@(Model.ProfilePicUrl ?? "/images/default-actor.png")" width="100%" alt="@Model.FullName" class="rounded-circle" style="max-width: 200px; margin: 20px;" onerror="this.src='/images/default-actor.png'" />
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.FullName</h5>
+                        <p class="card-text">
+                            <b>Biography:</b><br />
+                            @Model.Bio
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a class="btn btn-outline-primary" asp-action="Index">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-outline-success float-right" asp-action="Edit" asp-route-id="@Model.id">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
